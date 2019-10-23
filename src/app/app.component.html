@@ -1,26 +1,70 @@
-<div class="row" style="margin-top: 25px;">
-  <div class="col-md-3">
-    <input type="text" class="form-control" [(ngModel)]="groceryName" placeholder="Name">
-  </div>
-  <div class="col-md-3">
-    <input type="text" class="form-control" [(ngModel)]="groceryCategory" placeholder="Category">
-  </div>
-  <div class="col-md-3">
-    <button type="button" (click)="CreateRecord()" [disabled]="!groceryName || !groceryCategory" class="btn btn-primary">+
-      Add</button>
-  </div>
-</div>
-<div class="row" style="margin-top: 25px;">
-  <div class="col-md-3">
-    <div class="card"  *ngFor="let item of groceryItems">
-      <div class="card-body" >
-        <input type="checkbox" [(ngModel)]="item.checked" (ngModelChange)="UpdateRecord(item)">
-        <input type="text" [(ngModel)]="item.name" (ngModelChange)="UpdateRecord(item)">
-        <input type="text" [(ngModel)]="item.category" (ngModelChange)="UpdateRecord(item)">
-        <p class="card-text">Address: {{item.when}}</p>
-        <a href="#" class="card-link" (click)="RemoveRecord(item.id)">Delete</a>
-      </div>
-    </div>
-  </div>
-</div>
+<mat-toolbar color="primary">Grocery List</mat-toolbar>
 
+<div class="container">
+  <br>
+  <div (click)="addItems=true">+ Add items</div>
+  <mat-card *ngIf="addItems" style="margin-bottom: 1rem">
+    <mat-card-content>
+      <div class="row">
+        <div class="col-sm-12 col-md-5">
+          <mat-form-field>
+            <input matInput type="text" [(ngModel)]="groceryName" placeholder="Name">
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-12 col-md-5">
+          <mat-form-field>
+            <input matInput type="text" [(ngModel)]="groceryCategory" placeholder="Category">
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-12 col-md-2">
+          <button mat-raised-button color="primary" style="margin-right: 1rem"
+                  (click)="CreateRecord()"
+                  [disabled]="!groceryName || !groceryCategory">
+            + Add
+          </button>
+
+          <button mat-raised-button color="accent" (click)="addItems=false">Done</button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="checked">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> . </th>
+      <td mat-cell *matCellDef="let item">
+        <mat-checkbox [(ngModel)]="item.checked" (ngModelChange)="UpdateRecord(item)"></mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <td mat-cell *matCellDef="let item"> {{item.name}}
+        <br><sub>{{ item.when}}</sub>
+      </td>
+    </ng-container>
+
+    <!-- Category Column -->
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+      <td mat-cell *matCellDef="let item">
+        {{item.category}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="trash">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let item"><i class="fas fa-trash-alt" (click)="RemoveRecord(item)"></i></td>
+
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</div>

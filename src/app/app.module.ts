@@ -9,6 +9,17 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { environment } from '../environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import {FormsModule} from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatInputModule} from '@angular/material/input';
+import {MatButtonModule} from '@angular/material/button';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatCardModule} from '@angular/material/card';
+import {MatSortModule} from '@angular/material/sort';
+import {MatTableModule} from '@angular/material/table';
+import {MatIconModule} from '@angular/material/icon';
+
 
 @NgModule({
   declarations: [
@@ -21,7 +32,17 @@ import {FormsModule} from '@angular/forms';
 
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    BrowserAnimationsModule,
+
+    MatCheckboxModule,
+    MatInputModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatCardModule,
+    MatSortModule,
+    MatTableModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

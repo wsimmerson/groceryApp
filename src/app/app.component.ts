@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {GroceryService} from './grocery.service';
 import {GroceryItem} from './models';
+
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +15,14 @@ export class AppComponent implements OnInit {
   groceryItems = [];
   groceryName;
   groceryCategory;
+  addItems = false;
 
   constructor(private groceryService: GroceryService) {}
+
+  displayedColumns: string[] = ['checked', 'name', 'category', 'trash'];
+  dataSource = new MatTableDataSource([]);
+
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   ngOnInit() {
     this.groceryService.read_Groceries().subscribe(data => {
@@ -21,18 +30,21 @@ export class AppComponent implements OnInit {
       this.groceryItems = data.map(e => {
         const item = e.payload.doc.data() as GroceryItem;
         return {
-          id: item.id,
-          checked: item.checked,
+          id: e.payload.doc.id,
+          checked: item.checked || false,
           name: item.name,
           category: item.category,
           when: item.when,
         } as GroceryItem;
       });
+      this.dataSource = new MatTableDataSource(this.groceryItems);
+      this.dataSource.sort = this.sort;
     });
   }
 
   CreateRecord() {
     const record = {
+      checked: false,
       name: this.groceryName,
       category: this.groceryCategory,
       when: (new Date()).toLocaleString()
@@ -54,7 +66,11 @@ export class AppComponent implements OnInit {
   }
 
   RemoveRecord(rowID) {
-    this.groceryService.delete_GroceryItem(rowID);
+    const r = confirm(`Delete ${rowID.name}?`);
+    if (r) {
+      this.groceryService.delete_GroceryItem(rowID.id);
+    }
+
   }
 
 }
