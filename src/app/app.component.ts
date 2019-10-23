@@ -4,6 +4,7 @@ import {GroceryItem} from './models';
 
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {AuthService} from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,7 @@ export class AppComponent implements OnInit {
   groceryCategory;
   addItems = false;
 
-  constructor(private groceryService: GroceryService) {}
+  constructor(private groceryService: GroceryService, private auth: AuthService) {}
 
   displayedColumns: string[] = ['checked', 'name', 'category', 'trash'];
   dataSource = new MatTableDataSource([]);
@@ -25,6 +26,10 @@ export class AppComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   ngOnInit() {
+    this.getList();
+  }
+
+  getList() {
     this.groceryService.read_Groceries().subscribe(data => {
 
       this.groceryItems = data.map(e => {
@@ -70,7 +75,19 @@ export class AppComponent implements OnInit {
     if (r) {
       this.groceryService.delete_GroceryItem(rowID.id);
     }
-
   }
 
+  isLoggedIn(): boolean {
+    return this.auth.isLoggedIn;
+  }
+
+  login() {
+    this.auth.loginWithGoogle();
+    this.getList();
+  }
+
+  async logout() {
+    await this.auth.logout();
+    this.dataSource = new MatTableDataSource([]);
+  }
 }

@@ -1,5 +1,7 @@
 # GroceryApp
 
+This app was built to be a simple tool for my wife and I to manage grocery lists.  Other programs we have tried havent updated as quickly or accurately.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.9.
 
 ## Development server
@@ -25,3 +27,20 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Security
+While we cannot yet prevent prople from signing up, we can deny access to those we do not explicitly allow to access data.
+
+Add a allowed_users collection and create documents with the uid of the user as the document id, then implement the below rules.
+
+## Firestore Rules
+```$xslt
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if exists(/databases/$(database)/documents/allowed_users/$(request.auth.uid))
+    }
+  }
+}
+```

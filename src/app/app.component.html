@@ -1,8 +1,13 @@
 <mat-toolbar color="primary">Grocery List</mat-toolbar>
 
-<div class="container">
+<div class="container" *ngIf="!isLoggedIn()">
+  <button mat-raised-button color="accent" (click)="login()">login</button>
+</div>
+
+<div class="container" *ngIf="isLoggedIn()">
   <br>
-  <div (click)="addItems=true">+ Add items</div>
+  <button mat-raised-button color="primary" (click)="addItems=true">+ Add</button>
+  <br><br>
   <mat-card *ngIf="addItems" style="margin-bottom: 1rem">
     <mat-card-content>
       <div class="row">
@@ -14,7 +19,25 @@
 
         <div class="col-sm-12 col-md-5">
           <mat-form-field>
-            <input matInput type="text" [(ngModel)]="groceryCategory" placeholder="Category">
+            <mat-label>Cars</mat-label>
+            <select matNativeControl [(ngModel)]="groceryCategory">
+              <option>Backing/spices</option>
+              <option>Beverages</option>
+              <option>Breads/grains</option>
+              <option>Canned goods</option>
+              <option>Condiments</option>
+              <option>Dairy</option>
+              <option>Deli</option>
+              <option>Frozen foods</option>
+              <option>Household supplies</option>
+              <option>Meat/seafood</option>
+              <option>Other</option>
+              <option>Paper/plastic</option>
+              <option>Pet care</option>
+              <option>Produce</option>
+              <option>Snacks</option>
+              <option>Toiletries</option>
+            </select>
           </mat-form-field>
         </div>
 
@@ -30,7 +53,7 @@
       </div>
     </mat-card-content>
   </mat-card>
-
+</div>
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
     <!-- Position Column -->
@@ -67,4 +90,8 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-</div>
+  <div *ngIf="isLoggedIn()" class="container" style="text-align: right">
+    <br>
+    <button mat-raised-button color="warn" (click)="logout()">Log out</button>
+  </div>
+

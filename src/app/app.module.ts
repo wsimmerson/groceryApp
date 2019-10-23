@@ -19,6 +19,8 @@ import {MatCardModule} from '@angular/material/card';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import {MatIconModule} from '@angular/material/icon';
+import {MatSelectModule} from '@angular/material/select';
+import {AngularFireAuthModule} from "@angular/fire/auth";
 
 
 @NgModule({
@@ -28,6 +30,7 @@ import {MatIconModule} from '@angular/material/icon';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    AngularFireAuthModule,
     FormsModule,
 
     AngularFireModule.initializeApp(environment.firebase),
@@ -43,6 +46,7 @@ import {MatIconModule} from '@angular/material/icon';
     MatSortModule,
     MatTableModule,
     MatIconModule,
+    MatSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
