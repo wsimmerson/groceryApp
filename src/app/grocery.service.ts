@@ -10,7 +10,7 @@ export class GroceryService {
     private firestore: AngularFirestore
   ) { }
 
-  create_NewGroceryItem(record) {
+  create_GroceryItem(record) {
     return this.firestore.collection('Groceries').add(record);
   }
 
