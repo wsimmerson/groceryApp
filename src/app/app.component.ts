@@ -10,6 +10,8 @@ import {GroceryItem} from './models';
 export class AppComponent implements OnInit {
   title = 'groceryApp';
   groceryItems = [];
+  groceryName;
+  groceryCategory;
 
   constructor(private groceryService: GroceryService) {}
 
@@ -17,17 +19,42 @@ export class AppComponent implements OnInit {
     this.groceryService.read_Groceries().subscribe(data => {
 
       this.groceryItems = data.map(e => {
+        const item = e.payload.doc.data() as GroceryItem;
         return {
-          id: e.payload.doc.id,
-          checked: e.payload.doc.data()['checked'],
-          name: e.payload.doc.data()['name'],
-          category: e.payload.doc.data()['category'],
-          when: e.payload.doc.data()['when'],
+          id: item.id,
+          checked: item.checked,
+          name: item.name,
+          category: item.category,
+          when: item.when,
         } as GroceryItem;
       });
-      console.log(this.groceryItems);
-
     });
+  }
+
+  CreateRecord() {
+    const record = {
+      name: this.groceryName,
+      category: this.groceryCategory,
+      when: (new Date()).toLocaleString()
+    } as GroceryItem;
+
+    this.groceryService.create_GroceryItem(record).then(resp => {
+      this.groceryName = '';
+      this.groceryCategory = '';
+      console.log(resp);
+    })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  UpdateRecord(record) {
+    record.when = (new Date()).toLocaleString();
+    this.groceryService.update_GroceryItem(record.id, record);
+  }
+
+  RemoveRecord(rowID) {
+    this.groceryService.delete_GroceryItem(rowID);
   }
 
 }

@@ -1,7 +1,7 @@
 export interface GroceryItem {
-  id: string;
+  id?: string;
   checked: boolean;
   name: string;
   category: string;
-  when: string;
+  when?: string;
 }
