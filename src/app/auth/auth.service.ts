@@ -3,37 +3,53 @@ import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { User } from 'firebase';
 import {Router} from '@angular/router';
+import {GroceryService} from '../grocery.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   user: User;
+  access = false;
 
-  constructor(public  afAuth: AngularFireAuth, public  router: Router) {
+  constructor(public  afAuth: AngularFireAuth, public  router: Router, private groceryService: GroceryService) {
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.user = user;
         localStorage.setItem('user', JSON.stringify(this.user));
+
+        // check if user has permissions
+        this.groceryService.read_Groceries().subscribe(data => {
+          this.access = true;
+          console.log(this.access);
+        }, error => {
+          this.access = false;
+          console.log(error, this.access);
+        });
+        //  end permissions check
+
       } else {
         localStorage.setItem('user', null);
+        this.access = false;
       }
     });
   }
 
   async loginWithGoogle() {
     await  this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
-    this.router.navigate(['/']);
   }
 
   async logout() {
     await this.afAuth.auth.signOut();
     localStorage.removeItem('user');
-    this.router.navigate(['/']);
   }
 
   get isLoggedIn(): boolean {
     const  user  =  JSON.parse(localStorage.getItem('user'));
     return  user  !==  null;
+  }
+
+  get hasPermission() {
+    return this.access;
   }
 }

@@ -40,3 +40,13 @@ table {
   width: 100%;
 }
 
+.accessdenied {
+  background-color: darkred;
+  display:flex;
+  color: white;
+  height: 80vh;
+  font-weight: 700;
+  text-align: center;
+  justify-content: center;
+  flex-direction: column;
+}

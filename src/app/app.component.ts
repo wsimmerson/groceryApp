@@ -81,13 +81,19 @@ export class AppComponent implements OnInit {
     return this.auth.isLoggedIn;
   }
 
+  hasPermission() {
+    return this.auth.hasPermission;
+  }
+
   login() {
-    this.auth.loginWithGoogle();
-    this.getList();
+    this.auth.loginWithGoogle().then(() => {
+      this.getList();
+    });
   }
 
   async logout() {
-    await this.auth.logout();
-    this.dataSource = new MatTableDataSource([]);
+    await this.auth.logout().then(() => {
+      this.dataSource = new MatTableDataSource([]);
+    });
   }
 }

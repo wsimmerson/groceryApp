@@ -1,10 +1,15 @@
 <mat-toolbar color="primary">Grocery List</mat-toolbar>
 
-<div class="container" *ngIf="!isLoggedIn()">
+<div class="container" *ngIf="!isLoggedIn()" style="margin: 5rem; text-align: center;">
   <button mat-raised-button color="accent" (click)="login()">login</button>
 </div>
 
-<div class="container" *ngIf="isLoggedIn()">
+<div class="container accessdenied"
+     *ngIf="isLoggedIn() && !hasPermission()">
+  You have insufficient privileges to use this app
+</div>
+
+<div class="container" *ngIf="isLoggedIn() && hasPermission()">
   <br>
   <button mat-raised-button color="primary" (click)="addItems=true">+ Add</button>
   <br><br>
@@ -54,7 +59,7 @@
     </mat-card-content>
   </mat-card>
 </div>
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" *ngIf="isLoggedIn() && hasPermission()">
 
     <!-- Position Column -->
     <ng-container matColumnDef="checked">
