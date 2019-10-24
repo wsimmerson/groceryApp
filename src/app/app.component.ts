@@ -26,10 +26,6 @@ export class AppComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   ngOnInit() {
-    this.getList();
-  }
-
-  getList() {
     this.groceryService.read_Groceries().subscribe(data => {
 
       this.groceryItems = data.map(e => {
@@ -42,6 +38,7 @@ export class AppComponent implements OnInit {
           when: item.when,
         } as GroceryItem;
       });
+
       this.dataSource = new MatTableDataSource(this.groceryItems);
       this.dataSource.sort = this.sort;
     });
@@ -58,7 +55,6 @@ export class AppComponent implements OnInit {
     this.groceryService.create_GroceryItem(record).then(resp => {
       this.groceryName = '';
       this.groceryCategory = '';
-      console.log(resp);
     })
       .catch(error => {
         console.log(error);
@@ -86,14 +82,10 @@ export class AppComponent implements OnInit {
   }
 
   login() {
-    this.auth.loginWithGoogle().then(() => {
-      this.getList();
-    });
+    this.auth.loginWithGoogle();
   }
 
   async logout() {
-    await this.auth.logout().then(() => {
-      this.dataSource = new MatTableDataSource([]);
-    });
+    await this.auth.logout();
   }
 }

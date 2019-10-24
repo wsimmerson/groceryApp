@@ -59,8 +59,7 @@
     </mat-card-content>
   </mat-card>
 </div>
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" *ngIf="isLoggedIn() && hasPermission()">
-
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8"  [hidden]="!isLoggedIn() || !hasPermission()">
     <!-- Position Column -->
     <ng-container matColumnDef="checked">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> <i class="fas fa-check-double" style="color: green"></i> </th>
@@ -96,6 +95,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+
 
   <div *ngIf="isLoggedIn()" class="container" style="text-align: right">
     <br>

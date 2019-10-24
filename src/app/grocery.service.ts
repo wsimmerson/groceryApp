@@ -25,4 +25,8 @@ export class GroceryService {
   delete_GroceryItem(recordID) {
     this.firestore.doc('Groceries/' + recordID).delete();
   }
+
+  check_auth() {
+    return this.firestore.collection('allowed_users').snapshotChanges();
+  }
 }

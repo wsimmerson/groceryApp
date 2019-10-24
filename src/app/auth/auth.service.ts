@@ -19,12 +19,10 @@ export class AuthService {
         localStorage.setItem('user', JSON.stringify(this.user));
 
         // check if user has permissions
-        this.groceryService.read_Groceries().subscribe(data => {
+        this.groceryService.check_auth().subscribe(data => {
           this.access = true;
-          console.log(this.access);
         }, error => {
           this.access = false;
-          console.log(error, this.access);
         });
         //  end permissions check
 
