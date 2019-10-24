@@ -46,3 +46,7 @@ testem.log
 Thumbs.db
 /src/environments/
 /.firebaserc
+/%RESOURCE_DIR%/
+/.firebase/
+/functions/node_modules/
+/src/environments/
